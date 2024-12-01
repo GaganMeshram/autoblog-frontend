@@ -9,15 +9,14 @@ const App = () => {
   const [posts, setPosts] = useState([]);
 
   const fetchPosts = async () => {
-    const res = await axios.get('http://localhost:5000/api/posts');
+    const url = process.env.REACT_APP_API_URL + "/api/posts";
+    const res = await axios.get(url);
     setPosts(res.data);
   };
 
   useEffect(() => {
     fetchPosts();
   }, []);
-
-  console.log(posts)
   return (
     <div>
       <Header />

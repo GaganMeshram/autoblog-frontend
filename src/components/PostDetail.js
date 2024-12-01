@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const PostDetail = ({ match }) => {
   const [post, setPost] = useState(null);
 
   useEffect(() => {
     const fetchPost = async () => {
-      const res = await axios.get(`http://localhost:5000/api/posts/${match.params.id}`);
+      const url = process.env.REACT_APP_API_URL + "/api/posts";
+      const res = await axios.get(url+`/${match.params.id}`);
+    //   console.log(res)
       setPost(res.data);
     };
 
-    fetchPost();  // Call fetchPost function inside the useEffect
-
-  }, [match.params.id]);  // Dependency array listens to changes in the post ID
+    fetchPost(); // Call fetchPost function inside the useEffect
+  }, [match.params.id]); // Dependency array listens to changes in the post ID
 
   if (!post) return <p>Loading...</p>;
 
