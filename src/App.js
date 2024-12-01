@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';  // Use Routes and Route instead of Switch
+import axios from 'axios';
+import BlogList from './components/BlogList';
+import Header from './components/Header';
+import PostDetail from './components/PostDetail';
 
-function App() {
+const App = () => {
+  const [posts, setPosts] = useState([]);
+
+  const fetchPosts = async () => {
+    const res = await axios.get('http://localhost:5000/api/posts');
+    setPosts(res.data);
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  console.log(posts)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header />
+      <div className="container mt-4">
+        <Routes>
+          <Route path="/" element={<BlogList posts={posts} />} />
+          <Route path="/post/:id" element={<PostDetail />} />
+        </Routes>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
