@@ -1,27 +1,33 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom"; // Import useParams
 import axios from "axios";
+import { marked } from "marked"; // Import the library
 
-const PostDetail = ({ match }) => {
+const PostDetail = () => {
+  const { id } = useParams(); // Extract 'id' from the URL parameters
   const [post, setPost] = useState(null);
 
   useEffect(() => {
     const fetchPost = async () => {
-      const url = process.env.REACT_APP_API_URL + "/api/posts";
-      const res = await axios.get(url+`/${match.params.id}`);
-    //   console.log(res)
-      setPost(res.data);
+      try {
+        const response = await axios.get(`http://localhost:5000/api/posts/${id}`);
+        setPost(response.data);
+      } catch (error) {
+        console.error("Failed to fetch the post:", error);
+      }
     };
 
-    fetchPost(); // Call fetchPost function inside the useEffect
-  }, [match.params.id]); // Dependency array listens to changes in the post ID
+    if (id) fetchPost(); // Fetch post only if 'id' exists
+  }, [id]); // Dependency array listens to changes in the post ID
 
   if (!post) return <p>Loading...</p>;
 
   return (
     <div className="container mt-4">
       <h1>{post.title}</h1>
-      <img src={post.image} alt={post.title} className="img-fluid" />
-      <p>{post.content}</p>
+      {post.image && <img src={post.image} alt={post.title} className="img-fluid" />}
+       {/* Render HTML content parsed from Markdown */}
+       <div dangerouslySetInnerHTML={{ __html: marked(post.content) }} />
     </div>
   );
 };
