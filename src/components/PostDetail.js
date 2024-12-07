@@ -5,6 +5,7 @@ import { marked } from "marked"; // Import the library
 import moment from "moment"; // Import moment.js
 import '../css/PostDetails.css';
 
+
 const PostDetail = () => {
   const { id } = useParams(); // Extract 'id' from the URL parameters
   const [post, setPost] = useState(null);
@@ -12,7 +13,8 @@ const PostDetail = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/posts/${id}`);
+        const url = process.env.REACT_APP_API_URL
+        const response = await axios.get(`${url}/api/posts/${id}`);
         setPost(response.data);
       } catch (error) {
         console.error("Failed to fetch the post:", error);
