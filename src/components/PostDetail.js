@@ -16,7 +16,7 @@ const PostDetail = () => {
     const fetchPost = async () => {
       try {
         const url = process.env.REACT_APP_API_URL;
-        const response = await axios.get(`${url}/api/postss/${id}`);
+        const response = await axios.get(`${url}/api/posts/${id}`);
         setPost(response.data);
       } catch (err) {
         console.error("Failed to fetch the post:", err);
